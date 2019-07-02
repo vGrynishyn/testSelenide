@@ -6,12 +6,15 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class Tests {
 
+    private final String COLUMN_NAME = "Office";
+    private final String COLUMN_VALUE = "San Francisco";
+
     @Test
     public void chackValueInTable(){
         open("https://mdbootstrap.com/docs/jquery/tables/datatables/");
         boolean isValueExists = new Datatables()
-                .searchValyeInColumnTable("Office", "San Francisco");
+                .searchForValueInColumnTable(COLUMN_NAME, COLUMN_VALUE);
 
-        Assert.assertTrue(isValueExists, "Expected name in not present in table");
+        Assert.assertTrue(isValueExists, String.format("Expected value( %s ) in not present in column '%s'.", COLUMN_VALUE, COLUMN_NAME));
     }
 }

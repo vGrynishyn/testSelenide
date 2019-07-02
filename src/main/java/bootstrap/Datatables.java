@@ -12,23 +12,27 @@ import static com.codeborne.selenide.Selenide.$$x;
 
 public class Datatables {
 
-    public boolean searchValyeInColumnTable(String columnName, String value){
+    private String tableHeaderLoc = "#dtBasicExample .th-sm";
+    private String tableRowLoc = ".//*[@id='dtBasicExample']/tbody/tr";
+
+    public boolean searchForValueInColumnTable(String columnName, String value) {
         int columnNumber = getAllColumn(columnName);
+        return isValuePresent(columnNumber, value);
         // $$x(".//*[@id='dtBasicExample']/tbody/tr").get(0).$$x("td").get(0).text()
-        ElementsCollection columnValuesColl = $$x(".//*[@id='dtBasicExample']/tbody/tr"); ///td["+ columnNumber +"]");
-        List<String> valuesList = new ArrayList<>();
-        for (SelenideElement element : columnValuesColl ) {
-            valuesList.add(element.$$x("td").get(columnNumber).text());
-        }
-
-//        List<SelenideElement> tr = columnValuesColl.forEach(row -> row.$$x("td"));
-//        return columnValues.texts().contains(value);
-        return true;
-
     }
 
-    public int getAllColumn(String columnName){
-        return $$("#dtBasicExample .th-sm").texts().indexOf(columnName) + 1;
+    private int getAllColumn(String columnName) {
+        return $$(tableHeaderLoc).texts().indexOf(columnName);
+    }
+
+    private boolean isValuePresent(int columnNumber, String value) {
+        ElementsCollection columnValuesColl = $$x(tableRowLoc); ///td["+ columnNumber +"]");
+        List<String> valuesList = new ArrayList<>();
+
+        for (SelenideElement element : columnValuesColl) {
+            valuesList.add(element.$$x("td").get(columnNumber).text());
+        }
+        return valuesList.contains(value);
     }
 
 }
